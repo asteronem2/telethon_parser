@@ -76,18 +76,21 @@ async def handle_message(event: NewMessage.Event):
                 have_antiword = True
                 break
         if have_keyword and not have_antiword:
-            for user in data_json['user_list']:
-                await bot.bot.send_message(
-                    chat_id=user,
-                    text=message.message,
-                    entities=[MessageEntity(
-                        type=convert_to_normal_entity[i.to_dict()["_"]],
-                        offset=i.offset,
-                        length=i.length,
-                        url=i.to_dict().get('url')
-                    ) for i in message.entities if i.to_dict()["_"] in convert_to_normal_entity.keys()] if message.entities else None,
-                    reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='Открыть 🔍', url=link_text)]])
-                )
+            for user in data_json['users']:
+                try:
+                    await bot.bot.send_message(
+                        chat_id=user,
+                        text=message.message,
+                        entities=[MessageEntity(
+                            type=convert_to_normal_entity[i.to_dict()["_"]],
+                            offset=i.offset,
+                            length=i.length,
+                            url=i.to_dict().get('url')
+                        ) for i in message.entities if i.to_dict()["_"] in convert_to_normal_entity.keys()] if message.entities else None,
+                        reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='Открыть 🔍', url=link_text)]])
+                    )
+                except:
+                    continue
     except:
         traceback.print_exc()
         return

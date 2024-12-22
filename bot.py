@@ -28,14 +28,14 @@ async def message_handler(message: Message):
                 json.dump(data_json, write_file, ensure_ascii=False)
 
         rres1 = re.fullmatch(r'(ключевые ?слова ?\n)(.+)', text_low, re.DOTALL)
-        if rres1:
+        if rres1 and message.from_user.id == 267261114:
             all_keywords = re.findall('[^,;\n]+', rres1.group(2))
             data_json['keywords'] = all_keywords or []
             with open('data.json', 'w') as write_file:
                 json.dump(data_json, write_file, ensure_ascii=False)
             await bot.send_message(message.from_user.id, 'Ключевые слова записаны')
         rres2 = re.fullmatch(r'(анти ?слова ?\n)(.+)', text_low, re.DOTALL)
-        if rres2:
+        if rres2 and message.from_user.id == 267261114:
             all_antiwords = re.findall('[^,;\n]+', rres2.group(2))
             data_json['antiwords'] = all_antiwords or []
             with open('data.json', 'w') as write_file:
